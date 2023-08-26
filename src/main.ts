@@ -16,18 +16,19 @@ const createThrottledResponse = (
 });
 
 const DEFAULT_FACTOR = 1;
+const HOMEPAGE = 'https://github.com/esroyo/proxy-throttle';
 
 async function handler(req: Request): Promise<Response> {
   const reqUrl = new URL(req.url);
-  const upstreamUrl = reqUrl.searchParams.get("url");
-  const factorRaw = reqUrl.searchParams.get("factor");
+  const upstreamUrl = reqUrl.searchParams.get('url');
+  const factorRaw = reqUrl.searchParams.get('factor');
   const factorParsed = Number(factorRaw);
   const factor = factorRaw === null || Number.isNaN(factorParsed)
     ? DEFAULT_FACTOR
     : factorParsed;
 
   if (!upstreamUrl) {
-    return new Response(await Deno.readTextFile('./README.md'), { headers: { 'content-type': 'text/plain' } });
+    return Response.redirect(HOMEPAGE, 302);
   }
 
   const upstreamResponse = await fetch(upstreamUrl, {
@@ -40,7 +41,7 @@ async function handler(req: Request): Promise<Response> {
     ? ReadableStream.from(
       createThrottledResponse(upstreamResponse.body, factor),
     )
-    : "";
+    : '';
 
   return new Response(body, {
     headers: upstreamResponse.headers,
