@@ -44,6 +44,7 @@ async function handler(req: Request): Promise<Response> {
     : '';
 
   const headers = new Headers(upstreamResponse.headers);
+  headers.delete('X-Frame-Options');
   headers.delete('Cache-Control');
   headers.set('Cache-Control', 'no-store');
 
