@@ -43,9 +43,11 @@ async function handler(req: Request): Promise<Response> {
     )
     : '';
 
-  return new Response(body, {
-    headers: upstreamResponse.headers,
-  });
+  const headers = new Headers(upstreamResponse.headers);
+  headers.delete('Cache-Control');
+  headers.set('Cache-Control', 'no-store');
+
+  return new Response(body, { headers });
 }
 
 Deno.serve(handler);
