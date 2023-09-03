@@ -47,8 +47,14 @@ async function handler(req: Request): Promise<Response> {
 
   const headers = new Headers(upstreamResponse.headers);
   headers.delete('X-Frame-Options');
-  headers.delete('Cache-Control');
-  headers.set('Cache-Control', 'no-store');
+
+  const allowCaching = reqUrl.searchParams.get('cache') === '1';
+
+  // By default prevent client caching, unless explicitly allowed by param
+  if (!allowCaching) {
+    headers.delete('Cache-Control');
+    headers.set('Cache-Control', 'no-store');
+  }
 
   return new Response(body, { headers });
 }

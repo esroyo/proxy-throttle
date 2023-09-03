@@ -12,6 +12,8 @@ Make requests to this service using parameters:
   * `url: string` The full URL of the desired resource
   * `factor?: number = 1` The amount of delay to impose on the response.
     A value of `1` will serve chunks on an interval of 1s from one another.
+  * `cache?: 1` By default client caching is prevented. Send a value of `1`
+    to allow client caching. 
 
 ### Example
 
