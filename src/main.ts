@@ -8,9 +8,11 @@ const createThrottledResponse = (
   factor: number,
 ) => ({
   async *[Symbol.asyncIterator]() {
+    const halfFactor = factor * 1000 / 2;
     for await (const chunk of body) {
+      await sleep(halfFactor);
       yield chunk;
-      await sleep(factor * 1000);
+      await sleep(halfFactor);
     }
   },
 });
